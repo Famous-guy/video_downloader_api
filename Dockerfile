@@ -1,4 +1,4 @@
-FROM golang:1.22.5
+FROM golang:1.24.2-bookworm-slim
 
 # Install yt-dlp and curl
 RUN apt-get update && \
