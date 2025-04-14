@@ -15,6 +15,8 @@
 //
 //
 //
+//
+//
 
 // 	"github.com/cloudinary/cloudinary-go/v2"
 // 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -320,6 +322,51 @@ func handleDownload(c *fiber.Ctx) error {
 	})
 }
 
+// func downloadWithProgress(videoURL, platform, folder string, bar *mpb.Bar) (string, error) {
+// 	tempName := fmt.Sprintf("tempfile_%d.mp4", time.Now().UnixNano())
+// 	finalPath := filepath.Join(folder, tempName)
+
+// 	// Set up the download command based on platform
+// 	var cmd *exec.Cmd
+// 	if platform == "Telegram" {
+// 		cmd = exec.Command("curl", "-L", "-o", finalPath, videoURL)
+// 	} else {
+// 		// Pass the cookies file to yt-dlp
+// 		cookiesFilePath := "./youtube.json" // Path to your cookies file (update if necessary)
+// 		cmd = exec.Command("yt-dlp", "--cookies", cookiesFilePath, "-o", finalPath, videoURL)
+// 	}
+
+// 	// Simulate progress
+// 	go func() {
+// 		for i := 0; i < 100; i++ {
+// 			time.Sleep(30 * time.Millisecond)
+// 			bar.IncrBy(1)
+// 		}
+// 	}()
+
+// 	// Execute the download command
+// 	cmd.Stdout = os.Stdout
+// 	cmd.Stderr = os.Stderr
+// 	if err := cmd.Run(); err != nil {
+// 		return "", err
+// 	}
+
+// 	// Upload to Cloudinary
+// 	cld, err := cloudinary.NewFromURL(os.Getenv("CLOUDINARY_URL"))
+// 	if err != nil {
+// 		return "", fmt.Errorf("failed to create cloudinary instance: %w", err)
+// 	}
+
+// 	resp, err := cld.Upload.Upload(context.Background(), finalPath, uploader.UploadParams{})
+// 	if err != nil {
+// 		return "", fmt.Errorf("cloudinary upload failed: %w", err)
+// 	}
+
+// 	// Optional: remove local file after upload
+// 	os.Remove(finalPath)
+
+//		return resp.SecureURL, nil
+//	}
 func downloadWithProgress(videoURL, platform, folder string, bar *mpb.Bar) (string, error) {
 	tempName := fmt.Sprintf("tempfile_%d.mp4", time.Now().UnixNano())
 	finalPath := filepath.Join(folder, tempName)
@@ -329,9 +376,8 @@ func downloadWithProgress(videoURL, platform, folder string, bar *mpb.Bar) (stri
 	if platform == "Telegram" {
 		cmd = exec.Command("curl", "-L", "-o", finalPath, videoURL)
 	} else {
-		// Pass the cookies file to yt-dlp
-		cookiesFilePath := "./youtube.json" // Path to your cookies file (update if necessary)
-		cmd = exec.Command("yt-dlp", "--cookies", cookiesFilePath, "-o", finalPath, videoURL)
+		// Assuming you have the cookies file in Netscape format at `cookies.txt`
+		cmd = exec.Command("yt-dlp", "--cookies", "cookies.txt", "-o", finalPath, videoURL)
 	}
 
 	// Simulate progress
