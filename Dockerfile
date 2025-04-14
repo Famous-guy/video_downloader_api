@@ -1,26 +1,33 @@
-FROM golang:1.24.2-bookworm-slim
+# Use official Golang image
+FROM golang:1.22.5
 
-# Install yt-dlp and curl
+# Install yt-dlp, curl, ffmpeg, python3 and pip
 RUN apt-get update && \
-    apt-get install -y curl ffmpeg python3 python3-pip && \
-    pip3 install yt-dlp
+    apt-get install -y --no-install-recommends \
+        curl \
+        ffmpeg \
+        python3 \
+        python3-pip \
+        ca-certificates && \
+    pip3 install --break-system-packages --no-cache-dir yt-dlp && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy Go module files and download deps
+# Copy Go module files and download dependencies
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-# Copy rest of the code
+# Copy the rest of the code
 COPY . .
 
-# Build the Go app
+# Build the Go application
 RUN go build -o main .
 
-# Expose port
+# Expose application port
 EXPOSE 3000
 
-# Run the app
+# Command to run the app
 CMD ["./main"]
