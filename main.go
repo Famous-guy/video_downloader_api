@@ -14,7 +14,6 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gofiber/fiber/v2"
-	"github.com/joho/godotenv"
 	"github.com/vbauerster/mpb/v8"
 	"github.com/vbauerster/mpb/v8/decor"
 )
@@ -33,9 +32,9 @@ var platforms = []string{"Telegram", "TikTok", "YouTube", "Facebook", "X"}
 
 func main() {
 	// Load .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
-	}
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Fatalf("Error loading .env file")
+	// }
 
 	// Log the CLOUDINARY_URL to validate it
 	cm := os.Getenv("CLOUDINARY_URL")
