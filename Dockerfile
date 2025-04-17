@@ -51,6 +51,8 @@ WORKDIR /app
 # Copy Go module files and download dependencies
 COPY go.mod ./
 COPY go.sum ./
+COPY .env ./
+COPY proxies.txt ./
 RUN go mod download
 
 # Copy the rest of the code
